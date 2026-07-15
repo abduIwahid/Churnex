@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Churnex — AI Churn Intelligence</title>
+    <link rel="stylesheet" href="/static/style.css?v=4">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>Churnex</h1>
+            <p>Advanced AI Analytics &amp; Retention Intelligence</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-target="tab-predict">Single Predict</button>
+            <button class="tab-btn" data-target="tab-bulk">Bulk Predict</button>
+            <button class="tab-btn" data-target="tab-dashboard">Dashboard</button>
+        </div>
+        
+        <!-- Tab 1: Single Predict -->
+        <main id="tab-predict" class="tab-content active">
+            <form id="prediction-form" class="glass-panel">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="senior_citizen">Senior Citizen</label>
+                        <select id="senior_citizen" name="senior_citizen" required>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="tenure">Tenure (Months)</label>
+                        <input type="number" id="tenure" name="tenure" min="0" value="1" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="monthly_charges">Monthly Charges ($)</label>
+                        <input type="number" step="0.01" id="monthly_charges" name="monthly_charges" value="50.00" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="total_charges">Total Charges ($)</label>
+                        <input type="number" step="0.01" id="total_charges" name="total_charges" value="50.00" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="contract">Contract Type</label>
+                        <select id="contract" name="contract" required>
+                            <option value="Month-to-month">Month-to-month</option>
+                            <option value="One year">One year</option>
+                            <option value="Two year">Two year</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="internet">Internet Service</label>
+                        <select id="internet" name="internet" required>
+                            <option value="DSL">DSL</option>
+                            <option value="Fiber optic">Fiber optic</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="num_services">Extra Services Count</label>
+                        <input type="number" id="num_services" name="num_services" min="0" max="8" value="0" required>
+                    </div>
+                </div>
+                <button type="submit" class="primary-btn">
+                    <span class="btn-text">Predict Churn</span>
+                    <div class="loader hidden" id="btn-loader"></div>
+                </button>
+            </form>
+
+            <div id="result-container" class="glass-panel hidden result-panel">
+                <div class="result-header">
+                    <h2>Prediction Result</h2>
+                    <button id="export-pdf-btn" class="secondary-btn">Export PDF</button>
+                </div>
+                
+                <div class="status-badge" id="result-status">Processing...</div>
+                
+                <div class="prob-container">
+                    <span>Probability of Churn:</span>
+                    <div class="progress-bar-bg">
+                        <div id="progress-bar" class="progress-bar-fill"></div>
+                    </div>
+                    <span id="prob-text">0%</span>
+                </div>
+
+                <!-- Explainable AI Section -->
+                <div class="shap-container">
+                    <h3>Why this prediction? (Feature Impact)</h3>
+                    <div id="shap-bars"></div>
+                </div>
+
+                <!-- Recommendations -->
+                <div class="recs-container">
+                    <h3>Actionable Recommendations</h3>
+                    <ul id="recs-list"></ul>
+                </div>
+            </div>
+        </main>
+
+        <!-- Tab 2: Bulk Predict -->
+        <main id="tab-bulk" class="tab-content glass-panel">
+            <h2>Bulk Prediction</h2>
+            <p style="margin-bottom: 2rem; color: var(--text-secondary);">Upload a CSV file containing customer data. The system will process all records and return a downloadable CSV with predictions.</p>
+            
+            <form id="bulk-form">
+                <div class="upload-zone" id="upload-zone">
+                    <p>Drag & Drop your CSV here or <span>click to browse</span></p>
+                    <input type="file" id="csv-file" name="file" accept=".csv" required>
+                </div>
+                <button type="submit" class="primary-btn" style="margin-top: 1.5rem;">
+                    <span class="btn-text" id="bulk-btn-text">Process CSV</span>
+                    <div class="loader hidden" id="bulk-btn-loader"></div>
+                </button>
+            </form>
+        </main>
+
+        <!-- Tab 3: Dashboard -->
+        <main id="tab-dashboard" class="tab-content glass-panel">
+            <h2>Analytics Dashboard</h2>
+            <div class="dashboard-stats" id="dash-summary">
+                <div class="stat-card">
+                    <h4>Total Customers</h4>
+                    <span id="stat-total">...</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Overall Churn Rate</h4>
+                    <span id="stat-rate">...</span>
+                </div>
+            </div>
+            <div class="chart-grid">
+                <div class="chart-container">
+                    <canvas id="contractChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chargesChart"></canvas>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
