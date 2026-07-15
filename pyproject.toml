@@ -12,6 +12,5 @@ dependencies = [
     "pandas>=2.2.0",
     "python-multipart>=0.0.9",
     "scikit-learn>=1.4.0",
-    "shap>=0.44.0",
     "uvicorn>=0.29.0",
 ]

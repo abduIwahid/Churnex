@@ -3,7 +3,7 @@ import numpy as np
 import joblib
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.neural_network import MLPClassifier
-import shap
+import shap_lite as shap
 
 def train_model():
     print("Loading data...")

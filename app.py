@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import os
 import io
-import shap
+import shap_lite as shap
 from fpdf import FPDF
 
 # Base directory — always the repo root regardless of CWD on Vercel
